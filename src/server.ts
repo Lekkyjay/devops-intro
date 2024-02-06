@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import config from './config'
 import postRoutes from './routes/post'
+import authRoutes from './routes/auth'
 
 const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT } = config
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
   res.send('Hello everybody good day!')
 })
 
+app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/posts', postRoutes)
 
 const PORT = process.env.PORT || 8000
