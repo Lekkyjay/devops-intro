@@ -7,7 +7,7 @@ import session from 'express-session'
 import { createClient } from 'redis'
 import RedisStore from 'connect-redis'
 
-const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, REDIS_URL, REDIS_PORT, SESSION_SECRET } = config
+const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, REDIS_URL, SESSION_SECRET } = config
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
 
 const connectWithRetry = () => {
@@ -50,7 +50,7 @@ app.use(session({
 
 app.use(express.json())
 
-app.get('/', (req, res) => {
+app.get('/api/v1', (req, res) => {
   res.send('Hello everybody good day!')
 })
 

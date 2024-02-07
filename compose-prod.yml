@@ -22,5 +22,3 @@ services:
 
 volumes:
   mongo-db:
-tbc: 1:54
-tbc: 2:48
