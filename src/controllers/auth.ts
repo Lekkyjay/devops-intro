@@ -14,6 +14,8 @@ export const register = async (req: Request, res: Response) => {
 
     const user = await createUser({ username, password: hashedPw })
 
+    req.session.userId = user._id
+
     return res.status(200).json({
       status: 'success',
       data: { user }
@@ -36,6 +38,8 @@ export const login = async (req: Request, res: Response) => {
 
     const isMatched = await bcrypt.compare(password, user.password)
     if (!isMatched) return res.status(400).json({ status: 'fail', message: 'incorrect credentials' })
+
+    req.session.userId = user._id
 
     return res.status(200).json({ status: 'success' })
   }

@@ -3,8 +3,11 @@ import mongoose from 'mongoose'
 import config from './config'
 import postRoutes from './routes/post'
 import authRoutes from './routes/auth'
+import session from 'express-session'
+import { createClient } from 'redis'
+import RedisStore from 'connect-redis'
 
-const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT } = config
+const { MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, REDIS_URL, REDIS_PORT, SESSION_SECRET } = config
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
 
 const connectWithRetry = () => {
@@ -19,7 +22,31 @@ const connectWithRetry = () => {
 
 connectWithRetry()
 
+// Initialize client.
+const redisClient = createClient({ url: REDIS_URL })
+redisClient.connect()
+redisClient.on('connect', () => console.log('RedisClient is connected'))
+redisClient.on('error', (err) => console.log('RedisClient error.....:', err))
+redisClient.on('reconnecting', () => console.log('RedisClient is reconnecting'))
+redisClient.on('ready', () => console.log('RedisClient is ready'))
+
+// Initialize store.
+let redisStore = new RedisStore({ client: redisClient })
+
 const app = express()
+
+app.use(session({
+  store: redisStore,
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: false,
+    httpOnly: true,
+    maxAge: 300000,   //5min
+    sameSite: 'lax'
+  }
+}))
 
 app.use(express.json())
 
