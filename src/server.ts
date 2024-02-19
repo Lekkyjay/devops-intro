@@ -51,7 +51,13 @@ app.use(session({
 app.use(express.json())
 
 app.get('/api/v1', (req, res) => {
-  res.send('Hello everybody good day!')
+  console.log('load balancing works')
+  res.send('Hello everybody good day everyday!')
+})
+
+app.get('/api/v1/headers', (req, res) => {
+  const headers = req.headers
+  res.status(200).send(headers)
 })
 
 app.use('/api/v1/auth', authRoutes)
