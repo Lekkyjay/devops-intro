@@ -1,4 +1,5 @@
 node_modules
 .env
-compose.yml
+compose*
+!compose-nginx-prod-remote.yml
 dist
