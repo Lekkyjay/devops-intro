@@ -2,6 +2,7 @@ version: '3.8'
 services:
   api-prod:
     build: .
+    image: lekky/api-prod
     environment:
       - NODE_ENV=production
       - PORT=${PORT}
